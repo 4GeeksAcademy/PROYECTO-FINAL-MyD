@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 ruff = "*"
-requests = "*"
 
 [dev-packages]
 
