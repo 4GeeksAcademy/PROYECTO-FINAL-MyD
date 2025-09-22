@@ -54,8 +54,14 @@ def get_place(place_id):
 def list_places():
     page = request.args.get("page", 1, type=int)
     limit = request.args.get("limit", 10, type=int)
+    place_type = request.args.get("type", None, type=str)
 
-    pagination = Places.query.paginate(page=page, per_page=limit, error_out=False)
+    query = Places.query
+    if place_type:
+        types = [t.strip() for t in place_type.split(",")]
+        query = query.filter(Places.type.in_(types))
+
+    pagination = query.paginate(page=page, per_page=limit, error_out=False)
     places = [p.serialize() for p in pagination.items]
 
     return jsonify(
