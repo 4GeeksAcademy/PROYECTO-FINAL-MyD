@@ -22,4 +22,6 @@ class Places(db.Model):
             "place_type": self.place_type,
             "lat": self.lat,
             "lng": self.lng,
+            "address": self.address,
+            "city": self.city,
         }
