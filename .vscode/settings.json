@@ -1,3 +1,5 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/api/.venv/bin/python"
+  "python.defaultInterpreterPath": "${workspaceFolder}/api/.venv/bin/python",
+  "python-envs.defaultEnvManager": "ms-python.python:pipenv",
+  "python-envs.pythonProjects": []
 }
