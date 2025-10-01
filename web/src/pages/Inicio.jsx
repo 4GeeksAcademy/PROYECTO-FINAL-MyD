@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
   Navbar,
   Nav,
@@ -12,11 +12,14 @@ import {
 } from 'react-bootstrap';
 import './Inicio.css';
 import { Login } from './Login.jsx';
+import { UserContext } from '../context/UserContext.jsx';
 
 const Inicio = () => {
   const [showLogin, setShowLogin] = useState(false);
   const handleClose = () => setShowLogin(false);
   const handleShow = () => setShowLogin(true);
+
+  const { user, logout } = useContext(UserContext);
 
   return (
     <>
@@ -42,10 +45,21 @@ const Inicio = () => {
                   <NavDropdown.Item href="#">Pipicanes</NavDropdown.Item>
                 </NavDropdown>
 
-                <Button className="df-nav-btn ms-2">Sing up</Button>
-                <Button className="df-nav-btn ms-2" onClick={handleShow}>
-                  Login
-                </Button>
+                {user ? (
+                  <>
+                    <span className="me-2">Hola, {user.username}</span>
+                    <Button className="df-nav-btn ms-2" onClick={logout}>
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button className="df-nav-btn ms-2">Sing up</Button>
+                    <Button className="df-nav-btn ms-2" onClick={handleShow}>
+                      Login
+                    </Button>
+                  </>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -94,17 +108,12 @@ const Inicio = () => {
         </Container>
       </section>
 
-      {/* Footer */}
-      <footer className="df-footer text-center">
-        <Container>PerriFans 🐾🐾</Container>
-      </footer>
-
       <Modal show={showLogin} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Login</Modal.Title>
+          <Modal.Title>Iniciar sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Login />
+          <Login onClose={handleClose} />
         </Modal.Body>
       </Modal>
     </>

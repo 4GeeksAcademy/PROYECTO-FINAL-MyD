@@ -239,7 +239,6 @@ const Adondeir = () => {
           </Col>
         </Row>
       </Container>
-
       {/* Modal lateral de Favoritos */}
       <Offcanvas
         show={showFavorites}

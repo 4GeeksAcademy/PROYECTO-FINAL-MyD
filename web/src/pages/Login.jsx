@@ -1,43 +1,50 @@
-import { useContext, useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
-import { UserContext } from '../context/User';
+import { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-export const Login = () => {
+export const Login = ({ onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { login } = useContext(UserContext);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log('Login con:', email, password);
+
+    if (onClose) onClose();
+  };
 
   return (
-    <Container style={{ maxWidth: '400px', marginTop: '50px' }}>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group controlId="formBasicEmail">
+        <Form.Label>Email</Form.Label>
+        <Form.Control
+          type="email"
+          placeholder="Ingresa tu email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </Form.Group>
 
-        <Button
-          variant="primary"
-          className="w-100"
-          onClick={() => login(email, password)}
-        >
-          Submit
-        </Button>
-      </Form>
-    </Container>
+      <Form.Group controlId="formBasicPassword" className="mt-3">
+        <Form.Label>Contraseña</Form.Label>
+        <Form.Control
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </Form.Group>
+
+      <Button className="mt-3 w-100" type="submit">
+        Ingresar
+      </Button>
+    </Form>
   );
+};
+
+Login.propTypes = {
+  onClose: PropTypes.func,
 };
