@@ -10,16 +10,24 @@ import {
   Form,
   InputGroup,
   Spinner,
+  Offcanvas,
+  Alert,
 } from 'react-bootstrap';
-import { FaSearch, FaUser } from 'react-icons/fa';
+import { FaSearch, FaStar, FaRegStar, FaUser, FaHeart } from 'react-icons/fa';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-const Adondeir = () => {
+const AdondeirConF = () => {
   const [query, setQuery] = useState('');
   const [places, setPlaces] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [alert, setAlert] = useState(null);
 
   const mapRef = useRef(null);
+
+  // Simulación de sesión (puedes reemplazar por tu lógica real)
+  const isLoggedIn = true; // 👈 Cambia a false para probar
 
   const defaultCenter = { lat: 40.416775, lng: -3.70379 }; // Madrid
 
@@ -62,6 +70,23 @@ const Adondeir = () => {
     });
   };
 
+  // Alternar favoritos
+  const toggleFavorite = (place) => {
+    if (!isLoggedIn) {
+      setAlert('Debes iniciar sesión para guardar favoritos.');
+      setTimeout(() => setAlert(null), 3000);
+      return;
+    }
+
+    setFavorites((prev) => {
+      if (prev.find((f) => f.id === place.id)) {
+        return prev.filter((f) => f.id !== place.id);
+      } else {
+        return [...prev, place];
+      }
+    });
+  };
+
   // Centrar mapa en lugar
   const goToPlace = (location) => {
     if (mapRef.current && location) {
@@ -77,12 +102,27 @@ const Adondeir = () => {
         <Container fluid>
           <Navbar.Brand>PerriFans</Navbar.Brand>
           <Nav className="ms-auto align-items-center gap-2">
+            {isLoggedIn && (
+              <Button
+                variant="outline-dark"
+                onClick={() => setShowFavorites(true)}
+              >
+                <FaHeart /> Favoritos
+              </Button>
+            )}
             <Button variant="outline-dark">
               <FaUser />
             </Button>
           </Nav>
         </Container>
       </Navbar>
+
+      {/* Alerta */}
+      {alert && (
+        <Alert variant="warning" className="m-3 text-center">
+          {alert}
+        </Alert>
+      )}
 
       {/* Barra de búsqueda */}
       <Container fluid className="bg-light py-3">
@@ -146,6 +186,21 @@ const Adondeir = () => {
                       )}
                     </div>
                   </div>
+                  <div>
+                    <Button
+                      variant="link"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(place);
+                      }}
+                    >
+                      {favorites.find((f) => f.id === place.id) ? (
+                        <FaStar className="text-warning fs-4" />
+                      ) : (
+                        <FaRegStar className="text-secondary fs-4" />
+                      )}
+                    </Button>
+                  </div>
                 </Card.Body>
               </Card>
             ))}
@@ -184,6 +239,46 @@ const Adondeir = () => {
           </Col>
         </Row>
       </Container>
+      {/* Modal lateral de Favoritos */}
+      <Offcanvas
+        show={showFavorites}
+        onHide={() => setShowFavorites(false)}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Mis Favoritos</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {favorites.length > 0 ? (
+            favorites.map((fav) => (
+              <Card
+                key={fav.id}
+                className="mb-2"
+                style={{ cursor: 'pointer' }}
+                onClick={() => goToPlace(fav.location)}
+              >
+                <Card.Body className="d-flex align-items-center gap-2">
+                  {fav.photo && (
+                    <img
+                      src={fav.photo}
+                      alt={fav.name}
+                      style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: '4px',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  )}
+                  <span>{fav.name}</span>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <p className="text-muted">No tienes favoritos guardados.</p>
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
 
       {/* Footer */}
       <footer className="bg-info text-center py-3">
@@ -193,4 +288,4 @@ const Adondeir = () => {
   );
 };
 
-export default Adondeir;
+export default AdondeirConF;

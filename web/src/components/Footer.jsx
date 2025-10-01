@@ -1,5 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
+/*import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';*/
 
 export const Footer = () => {
   return (
