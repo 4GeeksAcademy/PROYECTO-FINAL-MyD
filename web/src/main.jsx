@@ -8,7 +8,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 
 import { App } from './App.jsx';
-import { UserProvider } from './context/User.jsx';
+import { UserProvider } from './context/UserProvider.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
