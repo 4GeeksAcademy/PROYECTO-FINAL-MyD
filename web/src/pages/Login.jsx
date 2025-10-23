@@ -1,21 +1,46 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 export const Login = ({ onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    try {
+      const response = await fetch(
+        'https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev/login',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
+        }
+      );
+      console.log(' Status:', response.status);
 
-    console.log('Login con:', email, password);
+      console.log('✅ Login exitoso:');
 
-    if (onClose) onClose();
+      if (onClose) onClose();
+
+      navigate('/AdondeirConF');
+    } catch (error) {
+      console.error('❌ Error en el login:', error);
+      setError(
+        error.message || 'Error en el login. Por favor, intenta de nuevo.'
+      );
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
+      {error && <Alert variant="danger">{error}</Alert>}
+
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email</Form.Label>
         <Form.Control

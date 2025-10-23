@@ -1,9 +1,10 @@
 import { useContext } from 'react';
-import { Navigate, Outlet } from 'react-router';
+import { Navigate } from 'react-router';
 import { UserContext } from '../../context/UserContext';
 import { isEmpty } from 'lodash';
+import Home from '../../pages/Home';
 
 export const GuardedRoute = () => {
   const { user } = useContext(UserContext);
-  return !isEmpty(user) ? <Outlet /> : <Navigate to="/login" />;
+  return !isEmpty(user) ? <Home /> : <Navigate to="/login" />;
 };
