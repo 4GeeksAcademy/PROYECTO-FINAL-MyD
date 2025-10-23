@@ -26,7 +26,7 @@ const Perfil = () => {
   const fetchUserData = async () => {
     try {
       const response = await fetch(
-        'https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev/profile',
+        'https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev/me',
         {
           method: 'GET',
           credentials: 'include',

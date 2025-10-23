@@ -30,6 +30,10 @@ export const Login = ({ onClose }) => {
 
       if (response.ok) {
         console.log('✅ Login exitoso:', data);
+        console.log(
+          '🔑 Access token guardado:',
+          sessionStorage.getItem('csrf_access_token')
+        );
         setMessage('¡Bienvenidx de nuevo! 🐾');
 
         // Esperar 1 segundo antes de redirigir

@@ -14,7 +14,14 @@ import {
   Alert,
   Dropdown,
 } from 'react-bootstrap';
-import { FaSearch, FaStar, FaRegStar, FaUser, FaHeart } from 'react-icons/fa';
+import {
+  FaSearch,
+  FaStar,
+  FaRegStar,
+  FaUser,
+  FaHeart,
+  FaTrash,
+} from 'react-icons/fa';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -302,6 +309,17 @@ const AdondeirConF = () => {
                     />
                   )}
                   <span>{fav.name}</span>
+
+                  <Button
+                    variant="link"
+                    className="text-danger p-0"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(fav);
+                    }}
+                  >
+                    <FaTrash className="fs-5" />
+                  </Button>
                 </Card.Body>
               </Card>
             ))
