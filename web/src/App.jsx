@@ -3,27 +3,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { routesConfig } from './services/routing/routes';
 import { GuardedRoute } from './components/routing/GuardedRoute';
 import Adondeir from './pages/Adondeir';
-import Inicio from './pages/Inicio';
 import AdondeirConF from './pages/AdondeirConF';
+import Home from './pages/Home';
+
+import { LoginRedirect } from './components/routing/LoginRedirect';
+import { Register } from './pages/Register';
 
 export const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/Inicio" element={<Inicio />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Login" element={<LoginRedirect />} />
+        <Route path="Register" element={<Register />} />
         <Route path="/Adondeir" element={<Adondeir />} />
-        <Route path="*" element={<Inicio />} />
+        <Route path="*" element={<Home />} />
         <Route path="**" element={<AdondeirConF />} />
-
-        {/* Rutas privadas */}
         <Route element={<GuardedRoute />}>
-          {routesConfig.map((route) => (
-            <Route
-              key={route.name}
-              path={route.path}
-              element={route.component}
-            />
-          ))}
+          {routesConfig.map((route) => {
+            return (
+              <Route
+                key={route.name}
+                path={route.path}
+                element={route.component}
+              />
+            );
+          })}
         </Route>
       </Routes>
     </>

@@ -1,21 +1,55 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 export const Login = ({ onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    console.log('Login con:', email, password);
+    try {
+      const response = await fetch(
+        'https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev/login',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-    if (onClose) onClose();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message || `Error ${response.status}: ${response.statusText}`
+        );
+      }
+
+      localStorage.setItem('token', data.access_token);
+
+      console.log('Login exitoso, token:', data.access_token);
+
+      if (onClose) onClose();
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
+      {error && <Alert variant="danger">{error}</Alert>}
+
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email</Form.Label>
         <Form.Control

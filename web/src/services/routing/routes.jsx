@@ -1,16 +1,16 @@
 import Adondeir from '../../pages/Adondeir';
-import Inicio from '../../pages/Inicio';
+import Home from '../../pages/Home';
 
 export const routesConfig = [
   {
     name: 'Root',
     path: '/',
-    component: <Inicio />,
+    component: <Home />,
   },
   {
     name: 'All',
     path: '*',
-    component: <Inicio />,
+    component: <Home />,
   },
   {
     name: 'Adondeir',
