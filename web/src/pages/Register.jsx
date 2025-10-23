@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { postRegister } from '../api/auth.js';
+import { postRegister } from '../services/api/auth';
 
 export const Register = ({ onClose }) => {
   const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ export const Register = ({ onClose }) => {
     setMessage('');
 
     try {
-      const data = await postRegister({ email, user_name, password });
+      const data = await postRegister(email, user_name, password);
 
       setMessage(
         data.message || 'Registro exitoso. Ahora puedes iniciar sesión.'

@@ -1,26 +1,25 @@
-export const baseUrl = "/api/";
+export const baseUrl =
+  'https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev/';
 
-export const usersUrl = "users/";
+export const usersUrl = 'users/';
 
-export const fetchWrapper = async (input, init) => {
-  return await fetch(input, {
-    ...init,
+export const fetchWrapper = async (input, init = {}) => {
+  const fetchConfig = {
+    method: init.method || 'GET',
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
-      "X-CSRF-TOKEN": sessionStorage.getItem("csrf_access_token") || "",
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': sessionStorage.getItem('csrf_access_token') || '',
     },
-    credentials: "include",
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText || response.status);
-    })
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
+  };
+
+  if (init.body) {
+    fetchConfig.body = init.body;
+  }
+
+  return await fetch(input, fetchConfig).then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+  });
 };

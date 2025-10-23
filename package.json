@@ -27,6 +27,6 @@
     "leaflet": "^1.9.4",
     "react-bootstrap": "^2.10.10",
     "react-leaflet": "^5.0.0",
-    "react-router-dom": "^7.9.1"
+    "react-router-dom": "^7.9.4"
   }
 }
