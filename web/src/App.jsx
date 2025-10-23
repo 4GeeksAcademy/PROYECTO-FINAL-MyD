@@ -7,6 +7,7 @@ import AdondeirConF from './pages/AdondeirConF';
 import Home from './pages/Home';
 import { LoginRedirect } from './components/routing/LoginRedirect';
 import { Register } from './pages/Register';
+import Perfil from './pages/Perfil';
 
 export const App = () => {
   return (
@@ -18,6 +19,7 @@ export const App = () => {
         <Route path="Register" element={<Register />} />
         <Route path="/Adondeir" element={<Adondeir />} />
         <Route path="/AdondeirConF" element={<AdondeirConF />} />
+        <Route path="/Perfil" element={<Perfil />} />
 
         <Route element={<GuardedRoute />}>
           {routesConfig.map((route) => {

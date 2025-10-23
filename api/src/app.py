@@ -41,7 +41,13 @@ jwt = JWTManager(app)
 MIGRATE = Migrate(app, db)
 db.init_app(app)
 app.config["CORS_HEADERS"] = "Content-Type"
-CORS(app, supports_credentials=True)
+CORS(
+    app,
+    supports_credentials=True,
+    origins=["https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev"],
+    allow_headers=["Content-Type"],
+    methods=["GET", "POST", "OPTIONS"],
+)
 
 app.register_blueprint(places_bp)
 

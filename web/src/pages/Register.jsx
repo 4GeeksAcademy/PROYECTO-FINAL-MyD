@@ -29,7 +29,7 @@ export const Register = ({ onClose }) => {
       //2 seg para redirigir
       setTimeout(() => {
         if (onClose) onClose();
-        navigate('/AdondeirConF');
+        navigate('/adondeirconf');
       }, 2000);
     } catch (err) {
       setError(

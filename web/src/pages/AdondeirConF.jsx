@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Navbar,
   Nav,
@@ -25,6 +25,13 @@ const AdondeirConF = () => {
   const [loading, setLoading] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [alert, setAlert] = useState(null);
+
+  useEffect(() => {
+    const savedFavorites = JSON.parse(
+      localStorage.getItem('favorites') || '[]'
+    );
+    setFavorites(savedFavorites);
+  }, []);
 
   const mapRef = useRef(null);
   const navigate = useNavigate();
@@ -82,15 +89,19 @@ const AdondeirConF = () => {
     }
 
     setFavorites((prev) => {
+      let newFavorites;
       if (prev.find((f) => f.id === place.id)) {
-        return prev.filter((f) => f.id !== place.id);
+        newFavorites = prev.filter((f) => f.id !== place.id);
       } else {
-        return [...prev, place];
+        newFavorites = [...prev, place];
       }
+
+      localStorage.setItem('favorites', JSON.stringify(newFavorites));
+      return newFavorites;
     });
   };
 
-  // Centrar mapa en lugar
+  // Centrar mapa
   const goToPlace = (location) => {
     if (mapRef.current && location) {
       mapRef.current.panTo(location);
