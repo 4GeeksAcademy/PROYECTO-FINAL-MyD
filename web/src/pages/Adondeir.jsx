@@ -187,7 +187,7 @@ const Adondeir = () => {
 
       {/* Footer */}
       <footer className="bg-info text-center py-3">
-        <Container>PerriFans 🐾🐾</Container>
+        <Container>PerriFans 🐾</Container>
       </footer>
     </>
   );

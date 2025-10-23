@@ -12,9 +12,11 @@ import {
   Spinner,
   Offcanvas,
   Alert,
+  Dropdown,
 } from 'react-bootstrap';
 import { FaSearch, FaStar, FaRegStar, FaUser, FaHeart } from 'react-icons/fa';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { useNavigate } from 'react-router-dom';
 
 const AdondeirConF = () => {
   const [query, setQuery] = useState('');
@@ -25,6 +27,7 @@ const AdondeirConF = () => {
   const [alert, setAlert] = useState(null);
 
   const mapRef = useRef(null);
+  const navigate = useNavigate();
 
   // Simulación de sesión (puedes reemplazar por tu lógica real)
   const isLoggedIn = true; // 👈 Cambia a false para probar
@@ -95,12 +98,17 @@ const AdondeirConF = () => {
     }
   };
 
+  const handleLogout = () => {
+    console.log('Cerrar sesión...');
+    navigate('/Home');
+  };
+
   return (
     <>
       {/* Header */}
       <Navbar bg="info" expand="lg" className="px-3">
         <Container fluid>
-          <Navbar.Brand>PerriFans</Navbar.Brand>
+          <Navbar.Brand>PerriFans🐾</Navbar.Brand>
           <Nav className="ms-auto align-items-center gap-2">
             {isLoggedIn && (
               <Button
@@ -110,21 +118,34 @@ const AdondeirConF = () => {
                 <FaHeart /> Favoritos
               </Button>
             )}
-            <Button variant="outline-dark">
-              <FaUser />
-            </Button>
+
+            <Dropdown align="end">
+              <Dropdown.Toggle variant="outline-dark" id="dropdown-user">
+                <FaUser />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => navigate('/perfil')}>
+                  Perfil
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setShowFavorites(true)}>
+                  Favoritos
+                </Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>
+                  Cerrar sesión
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Nav>
         </Container>
       </Navbar>
 
-      {/* Alerta */}
       {alert && (
         <Alert variant="warning" className="m-3 text-center">
           {alert}
         </Alert>
       )}
 
-      {/* Barra de búsqueda */}
       <Container fluid className="bg-light py-3">
         <InputGroup>
           <Form.Control
@@ -139,10 +160,9 @@ const AdondeirConF = () => {
         </InputGroup>
       </Container>
 
-      {/* Contenido principal */}
       <Container fluid className="my-4">
         <Row>
-          {/* Columna izquierda: resultados */}
+          {/* Columna izquierda de resultados */}
           <Col md={4} style={{ maxHeight: '600px', overflowY: 'auto' }}>
             <h5>Resultados</h5>
             {places.map((place) => (
@@ -280,9 +300,8 @@ const AdondeirConF = () => {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Footer */}
       <footer className="bg-info text-center py-3">
-        <Container>PerriFans 🐾🐾</Container>
+        <Container>PerriFans 🐾</Container>
       </footer>
     </>
   );

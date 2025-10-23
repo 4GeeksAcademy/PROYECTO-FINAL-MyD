@@ -7,11 +7,14 @@ export const Login = ({ onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
+
     try {
       const response = await fetch(
         'https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev/login',
@@ -22,24 +25,32 @@ export const Login = ({ onClose }) => {
           body: JSON.stringify({ email, password }),
         }
       );
-      console.log(' Status:', response.status);
 
-      console.log('✅ Login exitoso:');
+      const data = await response.json();
 
-      if (onClose) onClose();
+      if (response.ok) {
+        console.log('✅ Login exitoso:', data);
+        setMessage('¡Bienvenidx de nuevo! 🐾');
 
-      navigate('/AdondeirConF');
+        // Esperar 1 segundo antes de redirigir
+        setTimeout(() => {
+          if (onClose) onClose();
+          navigate('/adondeirconf');
+        }, 1000);
+      } else {
+        // Mostrar error del servidor
+        setError(data.error || 'Credenciales incorrectas');
+      }
     } catch (error) {
       console.error('❌ Error en el login:', error);
-      setError(
-        error.message || 'Error en el login. Por favor, intenta de nuevo.'
-      );
+      setError('Error de conexión. Por favor, intenta de nuevo.');
     }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
       {error && <Alert variant="danger">{error}</Alert>}
+      {message && <Alert variant="success">{message}</Alert>}
 
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email</Form.Label>
