@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { postRegister } from '../services/api/auth';
 
@@ -9,6 +10,7 @@ export const Register = ({ onClose }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,21 +18,23 @@ export const Register = ({ onClose }) => {
     setMessage('');
 
     try {
-      const data = await postRegister(email, user_name, password);
+      await postRegister(email, user_name, password);
 
-      setMessage(
-        data.message || 'Registro exitoso. Ahora puedes iniciar sesión.'
-      );
+      setMessage('¡Registrado correctamente! Bienvenidx a PerriFans 🐾');
       setEmail('');
       setUserName('');
       setPassword('');
 
-      if (onClose) onClose();
+      //2 seg para redirigir
+      setTimeout(() => {
+        if (onClose) onClose();
+        navigate('/AdondeirConF');
+      }, 2000);
     } catch (err) {
       setError(
-        err.message || 'Error en el registro. Por favor, intenta de nuevo.'
+        err?.message || 'Error en el registro. Por favor, intenta de nuevo.'
       );
-      console.error(err.message || 'Error al registrar usuario');
+      console.error(err?.message || 'Error al registrar usuario');
     }
   };
 
