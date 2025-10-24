@@ -8,15 +8,14 @@ import {
   Alert,
   Form,
 } from 'react-bootstrap';
-import { FaArrowLeft, FaStar } from 'react-icons/fa';
-import { useNavigate } from 'react-router';
+import { FaStar } from 'react-icons/fa';
+import NavbarComponent from '../components/NavBar';
 
 const Perfil = () => {
   const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     //coger datos del user de la API
@@ -62,16 +61,7 @@ const Perfil = () => {
 
   return (
     <>
-      <div className="bg-info py-3 px-3">
-        <Container>
-          <Button
-            variant="outline-dark"
-            onClick={() => navigate('/AdondeirConF')}
-          >
-            <FaArrowLeft /> Volver
-          </Button>
-        </Container>
-      </div>
+      <NavbarComponent showFavoritesButton={false} />
 
       <Container className="my-5">
         {error && <Alert variant="danger">{error}</Alert>}

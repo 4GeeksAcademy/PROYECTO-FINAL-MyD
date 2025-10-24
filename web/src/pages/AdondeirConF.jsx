@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import {
-  Navbar,
-  Nav,
   Container,
   Button,
   Row,
@@ -12,18 +10,10 @@ import {
   Spinner,
   Offcanvas,
   Alert,
-  Dropdown,
 } from 'react-bootstrap';
-import {
-  FaSearch,
-  FaStar,
-  FaRegStar,
-  FaUser,
-  FaHeart,
-  FaTrash,
-} from 'react-icons/fa';
+import { FaSearch, FaStar, FaRegStar, FaTrash } from 'react-icons/fa';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { useNavigate } from 'react-router-dom';
+import NavbarComponent from '../components/NavBar';
 
 const AdondeirConF = () => {
   const [query, setQuery] = useState('');
@@ -41,7 +31,6 @@ const AdondeirConF = () => {
   }, []);
 
   const mapRef = useRef(null);
-  const navigate = useNavigate();
 
   // Simulación de sesión (puedes reemplazar por tu lógica real)
   const isLoggedIn = true; // 👈 Cambia a false para probar
@@ -116,47 +105,12 @@ const AdondeirConF = () => {
     }
   };
 
-  const handleLogout = () => {
-    console.log('Cerrar sesión...');
-    navigate('/Home');
-  };
-
   return (
     <>
-      {/* Header */}
-      <Navbar bg="info" expand="lg" className="px-3">
-        <Container fluid>
-          <Navbar.Brand>PerriFans🐾</Navbar.Brand>
-          <Nav className="ms-auto align-items-center gap-2">
-            {isLoggedIn && (
-              <Button
-                variant="outline-dark"
-                onClick={() => setShowFavorites(true)}
-              >
-                <FaHeart /> Favoritos
-              </Button>
-            )}
-
-            <Dropdown align="end">
-              <Dropdown.Toggle variant="outline-dark" id="dropdown-user">
-                <FaUser />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => navigate('/perfil')}>
-                  Perfil
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setShowFavorites(true)}>
-                  Favoritos
-                </Dropdown.Item>
-                <Dropdown.Item onClick={handleLogout}>
-                  Cerrar sesión
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav>
-        </Container>
-      </Navbar>
+      <NavbarComponent
+        showFavoritesButton={true}
+        onShowFavorites={() => setShowFavorites(true)}
+      />
 
       {alert && (
         <Alert variant="warning" className="m-3 text-center">

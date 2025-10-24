@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_migrate import Migrate
 from src.db import db
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from src.routes.ruta_places import places_bp
 from flask_jwt_extended import (
     JWTManager,
@@ -43,10 +43,15 @@ db.init_app(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 CORS(
     app,
-    supports_credentials=True,
-    origins=["https://turbo-telegram-pj99w4rj5xvxfv54-5000.app.github.dev"],
-    allow_headers=["Content-Type"],
-    methods=["GET", "POST", "OPTIONS"],
+    resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization", "X-CSRF-TOKEN"],
+            "supports_credentials": True,
+            "expose_headers": ["Content-Type", "X-CSRF-TOKEN"],
+        }
+    },
 )
 
 app.register_blueprint(places_bp)

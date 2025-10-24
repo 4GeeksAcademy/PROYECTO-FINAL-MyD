@@ -9,6 +9,7 @@ import {
   Col,
   Image,
   Modal,
+  Card,
 } from 'react-bootstrap';
 import './Inicio.css';
 import { Login } from './Login.jsx';
@@ -18,6 +19,13 @@ import { Register } from './Register.jsx';
 export const Home = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [isReloading, setIsReloading] = useState(false);
+
+  const handleReload = () => {
+    setIsReloading(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => setIsReloading(false), 800);
+  };
 
   const handleShowLogin = () => setShowLogin(true);
   const handleCloseLogin = () => setShowLogin(false);
@@ -32,7 +40,14 @@ export const Home = () => {
       <header className="df-header">
         <Navbar expand="lg" className="df-navbar" variant="light">
           <Container fluid>
-            <Navbar.Brand className="df-brand">PerriFans</Navbar.Brand>
+            <Navbar.Brand
+              onClick={handleReload}
+              className="df-brand"
+              style={{ cursor: 'pointer' }}
+            >
+              {' '}
+              PerriFans
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto align-items-center">
@@ -136,6 +151,115 @@ export const Home = () => {
           <Register onClose={handleCloseRegister} />
         </Modal.Body>
       </Modal>
+
+      <section className="df-features py-5">
+        <Container>
+          <Row className="text-center">
+            <Col md={4} className="mb-4">
+              <div className="feature-icon mb-3">📸</div>
+              <h4>Comparte experiencias</h4>
+              <p>
+                Sube fotos y reseñas de tus visitas para ayudar a otros
+                perrifans.
+              </p>
+            </Col>
+
+            <Col md={4} className="mb-4">
+              <div className="feature-icon mb-3">⭐</div>
+              <h4>Guarda Favoritos</h4>
+              <p>
+                Crea tu lista personal de lugares favoritos para visitas
+                futuras.
+              </p>
+            </Col>
+
+            <Col md={4} className="mb-4">
+              <div className="feature-icon mb-3">💬</div>
+              <h4>Soporte y ayuda</h4>
+              <p>
+                Nuestro equipo está aquí para ayudarte con cualquier duda o
+                problema.
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      <section className="df-testimonials py-5">
+        <Container>
+          <h2 className="text-center mb-5">
+            Lo que dicen nuestros usuarios 🐾
+          </h2>
+          <Row>
+            <Col md={4} className="mb-4">
+              <Card className="testimonial-card H-100 shadow-sm">
+                <Card.Body>
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="testimonial-avatar me-3">🐶</div>
+                    <div>
+                      <h5 className="mb-0">María G.</h5>
+                      <small className="text-muted">Madrid</small>
+                    </div>
+                  </div>
+                  <p className="testimonial-text">
+                    Gracias a PerriFans, he descubierto parques increíbles cerca
+                    de casa. ¡Mi perro está encantado! 🐕‍ ¡Súper recomendado!
+                  </p>
+                  <div className="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col md={4} className="mb-4">
+              <Card className="testimonial-card H-100 shadow-sm">
+                <Card.Body>
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="testimonial-avatar me-3">🐶</div>
+                    <div>
+                      <h5 className="mb-0">Pedro A.</h5>
+                      <small className="text-muted">Valencia</small>
+                    </div>
+                  </div>
+                  <p className="testimonial-text">
+                    La mejor web para encontrar lugares dog-friendly. ¡He
+                    descubierto sitios geniales para pasear con mi perra!🐩
+                  </p>
+                  <div className="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col md={4} className="mb-4">
+              <Card className="testimonial-card H-100 shadow-sm">
+                <Card.Body>
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="testimonial-avatar me-3">🐶</div>
+                    <div>
+                      <h5 className="mb-0">Luci M.</h5>
+                      <small className="text-muted">Valencia</small>
+                    </div>
+                  </div>
+                  <p className="testimonial-text">
+                    PerriFans ha hecho que mis salidas con mi perro sean mucho
+                    más divertidas. ¡Ahora siempre sé a dónde ir! 🐕‍🦺
+                  </p>
+                  <div className="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      <footer className="df-footer text-center" style={{ cursor: 'pointer' }}>
+        <Container onClick={handleReload}>PerriFans 🐾</Container>
+      </footer>
+
+      {isReloading && (
+        <div className="reload-overlay">
+          <div className="reload-spinner"></div>
+        </div>
+      )}
     </>
   );
 };
