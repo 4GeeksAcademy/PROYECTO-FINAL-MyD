@@ -10,14 +10,20 @@ import {
   Form,
   InputGroup,
   Spinner,
+  Modal,
 } from 'react-bootstrap';
 import { FaSearch, FaUser } from 'react-icons/fa';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { Login } from './Login.jsx';
+import { Register } from './Register.jsx';
 
 const Adondeir = () => {
   const [query, setQuery] = useState('');
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   const mapRef = useRef(null);
 
@@ -70,19 +76,71 @@ const Adondeir = () => {
     }
   };
 
+  const openLogin = () => {
+    setShowLogin(true);
+    setShowRegister(false);
+  };
+
+  const openRegister = () => {
+    setShowRegister(true);
+    setShowLogin(false);
+  };
+
+  const closeModals = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+  };
+
   return (
     <>
       {/* Header */}
       <Navbar bg="info" expand="lg" className="px-3">
         <Container fluid>
-          <Navbar.Brand>PerriFans</Navbar.Brand>
+          <Navbar.Brand>PerriFans 🐾</Navbar.Brand>
           <Nav className="ms-auto align-items-center gap-2">
-            <Button variant="outline-dark">
+            <Button variant="outline-dark" onClick={openLogin}>
               <FaUser />
             </Button>
           </Nav>
         </Container>
       </Navbar>
+
+      {/* modal para el login*/}
+      <Modal show={showLogin} onHide={closeModals} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Iniciar sesión</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Login onClose={closeModals} />
+          <div className="mt-3 text-center">
+            <span>¿No tienes cuenta? </span>
+            <Button
+              variant="link"
+              onClick={openRegister}
+              style={{ padding: 0 }}
+            >
+              Regístrate aquí
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/*este es para el registro*/}
+      <Modal show={showRegister} onHide={closeModals} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Registro</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Register onClose={closeModals} />
+          <div className="mt-3 text-center">
+            <span>¿Ya tienes cuenta? </span>
+            <Button variant="link" onClick={openLogin} style={{ padding: 0 }}>
+              Inicia sesión aquí
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
 
       {/* Barra de búsqueda */}
       <Container fluid className="bg-light py-3">
@@ -187,7 +245,7 @@ const Adondeir = () => {
 
       {/* Footer */}
       <footer className="bg-info text-center py-3">
-        <Container>PerriFans 🐾🐾</Container>
+        <Container>PerriFans 🐾</Container>
       </footer>
     </>
   );

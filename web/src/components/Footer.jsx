@@ -10,7 +10,9 @@ export const Footer = () => {
         marginTop: '50px',
       }}
     >
-      <Container>
+      <Container
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
         <Row className="text-center text-md-start">
           <Col md={4} className="mb-3">
             <h5>PerriFans 🐾</h5>

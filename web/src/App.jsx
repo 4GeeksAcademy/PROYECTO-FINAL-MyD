@@ -5,20 +5,22 @@ import { GuardedRoute } from './components/routing/GuardedRoute';
 import Adondeir from './pages/Adondeir';
 import AdondeirConF from './pages/AdondeirConF';
 import Home from './pages/Home';
-
 import { LoginRedirect } from './components/routing/LoginRedirect';
 import { Register } from './pages/Register';
+import Perfil from './pages/Perfil';
 
 export const App = () => {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/Login" element={<LoginRedirect />} />
         <Route path="Register" element={<Register />} />
         <Route path="/Adondeir" element={<Adondeir />} />
-        <Route path="*" element={<Home />} />
-        <Route path="**" element={<AdondeirConF />} />
+        <Route path="/AdondeirConF" element={<AdondeirConF />} />
+        <Route path="/Perfil" element={<Perfil />} />
+
         <Route element={<GuardedRoute />}>
           {routesConfig.map((route) => {
             return (
@@ -30,6 +32,8 @@ export const App = () => {
             );
           })}
         </Route>
+
+        <Route path="*" element={<Home />} />
       </Routes>
     </>
   );

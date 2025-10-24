@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_migrate import Migrate
 from src.db import db
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from src.routes.ruta_places import places_bp
 from flask_jwt_extended import (
     JWTManager,
@@ -41,7 +41,18 @@ jwt = JWTManager(app)
 MIGRATE = Migrate(app, db)
 db.init_app(app)
 app.config["CORS_HEADERS"] = "Content-Type"
-CORS(app, supports_credentials=True)
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization", "X-CSRF-TOKEN"],
+            "supports_credentials": True,
+            "expose_headers": ["Content-Type", "X-CSRF-TOKEN"],
+        }
+    },
+)
 
 app.register_blueprint(places_bp)
 

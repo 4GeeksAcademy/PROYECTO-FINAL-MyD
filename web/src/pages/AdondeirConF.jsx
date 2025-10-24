@@ -1,7 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
-  Navbar,
-  Nav,
   Container,
   Button,
   Row,
@@ -13,8 +11,9 @@ import {
   Offcanvas,
   Alert,
 } from 'react-bootstrap';
-import { FaSearch, FaStar, FaRegStar, FaUser, FaHeart } from 'react-icons/fa';
+import { FaSearch, FaStar, FaRegStar, FaTrash } from 'react-icons/fa';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import NavbarComponent from '../components/NavBar';
 
 const AdondeirConF = () => {
   const [query, setQuery] = useState('');
@@ -24,10 +23,14 @@ const AdondeirConF = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  const mapRef = useRef(null);
+  useEffect(() => {
+    const savedFavorites = JSON.parse(
+      localStorage.getItem('favorites') || '[]'
+    );
+    setFavorites(savedFavorites);
+  }, []);
 
-  // Simulación de sesión (puedes reemplazar por tu lógica real)
-  const isLoggedIn = true; // 👈 Cambia a false para probar
+  const mapRef = useRef(null);
 
   const defaultCenter = { lat: 40.416775, lng: -3.70379 }; // Madrid
 
@@ -72,22 +75,27 @@ const AdondeirConF = () => {
 
   // Alternar favoritos
   const toggleFavorite = (place) => {
-    if (!isLoggedIn) {
+    const token = sessionStorage.getItem('csrf_access_token');
+    if (!token) {
       setAlert('Debes iniciar sesión para guardar favoritos.');
       setTimeout(() => setAlert(null), 3000);
       return;
     }
 
     setFavorites((prev) => {
+      let newFavorites;
       if (prev.find((f) => f.id === place.id)) {
-        return prev.filter((f) => f.id !== place.id);
+        newFavorites = prev.filter((f) => f.id !== place.id);
       } else {
-        return [...prev, place];
+        newFavorites = [...prev, place];
       }
+
+      localStorage.setItem('favorites', JSON.stringify(newFavorites));
+      return newFavorites;
     });
   };
 
-  // Centrar mapa en lugar
+  // Centrar mapa
   const goToPlace = (location) => {
     if (mapRef.current && location) {
       mapRef.current.panTo(location);
@@ -97,34 +105,17 @@ const AdondeirConF = () => {
 
   return (
     <>
-      {/* Header */}
-      <Navbar bg="info" expand="lg" className="px-3">
-        <Container fluid>
-          <Navbar.Brand>PerriFans</Navbar.Brand>
-          <Nav className="ms-auto align-items-center gap-2">
-            {isLoggedIn && (
-              <Button
-                variant="outline-dark"
-                onClick={() => setShowFavorites(true)}
-              >
-                <FaHeart /> Favoritos
-              </Button>
-            )}
-            <Button variant="outline-dark">
-              <FaUser />
-            </Button>
-          </Nav>
-        </Container>
-      </Navbar>
+      <NavbarComponent
+        showFavoritesButton={true}
+        onShowFavorites={() => setShowFavorites(true)}
+      />
 
-      {/* Alerta */}
       {alert && (
         <Alert variant="warning" className="m-3 text-center">
           {alert}
         </Alert>
       )}
 
-      {/* Barra de búsqueda */}
       <Container fluid className="bg-light py-3">
         <InputGroup>
           <Form.Control
@@ -139,10 +130,9 @@ const AdondeirConF = () => {
         </InputGroup>
       </Container>
 
-      {/* Contenido principal */}
       <Container fluid className="my-4">
         <Row>
-          {/* Columna izquierda: resultados */}
+          {/* Columna izquierda de resultados */}
           <Col md={4} style={{ maxHeight: '600px', overflowY: 'auto' }}>
             <h5>Resultados</h5>
             {places.map((place) => (
@@ -271,6 +261,17 @@ const AdondeirConF = () => {
                     />
                   )}
                   <span>{fav.name}</span>
+
+                  <Button
+                    variant="link"
+                    className="text-danger p-0"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(fav);
+                    }}
+                  >
+                    <FaTrash className="fs-5" />
+                  </Button>
                 </Card.Body>
               </Card>
             ))
@@ -280,9 +281,8 @@ const AdondeirConF = () => {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Footer */}
       <footer className="bg-info text-center py-3">
-        <Container>PerriFans 🐾🐾</Container>
+        <Container>PerriFans 🐾</Container>
       </footer>
     </>
   );

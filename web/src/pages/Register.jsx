@@ -18,7 +18,8 @@ export const Register = ({ onClose }) => {
     setMessage('');
 
     try {
-      await postRegister(email, user_name, password);
+      const response = await postRegister(user_name, email, password);
+      console.log('✅ Registro exitoso:', response);
 
       setMessage('¡Registrado correctamente! Bienvenidx a PerriFans 🐾');
       setEmail('');
@@ -28,7 +29,7 @@ export const Register = ({ onClose }) => {
       //2 seg para redirigir
       setTimeout(() => {
         if (onClose) onClose();
-        navigate('/AdondeirConF');
+        navigate('/adondeirconf');
       }, 2000);
     } catch (err) {
       setError(

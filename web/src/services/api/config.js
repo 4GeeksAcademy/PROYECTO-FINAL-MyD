@@ -17,9 +17,13 @@ export const fetchWrapper = async (input, init = {}) => {
     fetchConfig.body = init.body;
   }
 
-  return await fetch(input, fetchConfig).then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-  });
+  const response = await fetch(input, fetchConfig);
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Error en la solicitud');
+  }
+
+  return data;
 };

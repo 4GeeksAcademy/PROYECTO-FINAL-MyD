@@ -1,72 +1,57 @@
-import { useContext, useState } from 'react';
-import { NavLink } from 'react-router';
-import {
-  AppBar,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-} from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Navbar, Nav, Container, Button, Dropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaUser, FaHeart } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
-import { UserContext } from '../context/User';
-
-export const NavBar = () => {
-  const { user, logout } = useContext(UserContext);
-  const [anchorEl, setAnchorEl] = useState(null);
+const NavbarComponent = ({ showFavoritesButton = false, onShowFavorites }) => {
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-  };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+    console.log('Cerrando sesión...');
+    navigate('/');
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <NavLink to={'/'}>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Home
-          </Typography>
-        </NavLink>
-        {user.user_name}
-        <div>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleMenu}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
-        </div>
-      </Toolbar>
-    </AppBar>
+    <Navbar bg="info" expand="lg" className="px-3">
+      <Container fluid>
+        <Navbar.Brand as={Link} to="/" style={{ cursor: 'pointer' }}>
+          PerriFans 🐾
+        </Navbar.Brand>
+        <Nav className="ms-auto align-items-center gap-2">
+          {showFavoritesButton && (
+            <Button variant="outline-dark" onClick={onShowFavorites}>
+              <FaHeart /> Favoritos
+            </Button>
+          )}
+
+          <Dropdown align="end">
+            <Dropdown.Toggle variant="outline-dark" id="dropdown-user">
+              <FaUser />
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => navigate('/perfil')}>
+                Perfil
+              </Dropdown.Item>
+
+              <Dropdown.Item onClick={onShowFavorites}>Favoritos</Dropdown.Item>
+
+              <Dropdown.Divider />
+
+              <Dropdown.Item onClick={handleLogout}>
+                Cerrae sesión
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 };
+
+NavbarComponent.propTypes = {
+  showFavoritesButton: PropTypes.bool,
+  onShowFavorites: PropTypes.func,
+};
+
+export default NavbarComponent;
