@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import {
   Navbar,
   Nav,
-  NavDropdown,
   Container,
   Button,
   Row,
@@ -51,22 +50,9 @@ export const Home = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto align-items-center">
-                <NavDropdown
-                  title="Explore"
-                  id="explore-dropdown"
-                  align="end"
-                  menuVariant="dark"
-                  className="df-dropdown"
-                >
-                  <NavDropdown.Item href="#">
-                    Parques naturales{' '}
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#">Pipicanes</NavDropdown.Item>
-                </NavDropdown>
-
                 {user ? (
                   <>
-                    <span className="me-2">Hola, {user.username}</span>
+                    <span className="me-2">Hola, {user.user_name}</span>
                     <Button className="df-nav-btn ms-2" onClick={logout}>
                       Logout
                     </Button>

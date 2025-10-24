@@ -32,9 +32,6 @@ const AdondeirConF = () => {
 
   const mapRef = useRef(null);
 
-  // Simulación de sesión (puedes reemplazar por tu lógica real)
-  const isLoggedIn = true; // 👈 Cambia a false para probar
-
   const defaultCenter = { lat: 40.416775, lng: -3.70379 }; // Madrid
 
   // Buscar lugares
@@ -78,7 +75,8 @@ const AdondeirConF = () => {
 
   // Alternar favoritos
   const toggleFavorite = (place) => {
-    if (!isLoggedIn) {
+    const token = sessionStorage.getItem('csrf_access_token');
+    if (!token) {
       setAlert('Debes iniciar sesión para guardar favoritos.');
       setTimeout(() => setAlert(null), 3000);
       return;
